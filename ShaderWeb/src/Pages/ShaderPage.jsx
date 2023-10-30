@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import * as THREE from "three";
 import * as dat from "dat.gui";
+import { setupMouseNavigation } from "../Components/SetupMouseNavigation";
 
 const ShaderPage = () => {
   const width = window.innerWidth;
@@ -11,6 +12,8 @@ const ShaderPage = () => {
     const gui = new dat.GUI();
     const rotationControl = { rotationSpeed: 0.01};
     gui.add(rotationControl, "rotationSpeed", 0, 0.1).name("Rotation Speed");
+    // const mouseControl = { mouseSpeed: 2};
+    // gui.add(mouseControl, "mouseSpeed", 2, 5).name("Mouse Speed");
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x555555);
@@ -42,7 +45,7 @@ const ShaderPage = () => {
     scene.add(line);
     //#endregion
 
-    //? Toon shader
+    //? Cube material 
     const cubeGeometry = new THREE.BoxGeometry(2, 2, 2);
     const cubeMaterial = new THREE.MeshToonMaterial({
       color: 0x00ff00,
@@ -54,17 +57,19 @@ const ShaderPage = () => {
     scene.add(cubeMesh);
 
 
-    camera.position.z = 5;
-    camera.position.y = 2;
-    camera.rotation.x = 5.75;
+    camera.position.set(0, 2, 5); // Start Cam Position
+    camera.lookAt(cubeMesh.position); // Look at the center of the cube
+    // camera.rotation.set(0, 0, 0); // Reset Cam rotation
+
+    
+
+    const cleanMouseNav = setupMouseNavigation(camera, renderer, cubeMesh);
 
     function animate() {
       requestAnimationFrame(animate);
 
-      // plane.rotation.y += 0.01;
       line.rotation.y += rotationControl.rotationSpeed;
       cubeMesh.rotation.y += rotationControl.rotationSpeed;
-      // bufferMesh.rotation.y += 0.01;
 
       renderer.render(scene, camera);
     }
@@ -75,6 +80,7 @@ const ShaderPage = () => {
       container.removeChild(renderer.domElement);
       renderer.dispose();
       gui.destroy();
+      cleanMouseNav();
     };
   }, []);
 
