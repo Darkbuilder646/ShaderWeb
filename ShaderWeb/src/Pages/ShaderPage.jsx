@@ -1,86 +1,50 @@
 import React, { useEffect } from "react";
-import * as THREE from "three";
-import * as dat from "dat.gui";
-import { setupMouseNavigation } from "../Components/SetupMouseNavigation";
+
+import createCam from "../Components/Camera.js";
+import createScene from "../Components/Scene.js";
+import createCube from "../Components/Cube.js";
+import createPlane from "../Components/Plane.js";
+
+import createRenderer from "../Systems/Renderer.js";
+import createGUI from "../Systems/GUI.js";
+import createCubeWirefram from "../Components/Wireframe.js";
+
 
 const ShaderPage = () => {
-  const width = window.innerWidth;
-  const height = window.innerHeight;
-
   useEffect(() => {
-    //* GUI Panel
-    const gui = new dat.GUI();
-    const rotationControl = { rotationSpeed: 0.01};
-    gui.add(rotationControl, "rotationSpeed", 0, 0.1).name("Rotation Speed");
-    // const mouseControl = { mouseSpeed: 2};
-    // gui.add(mouseControl, "mouseSpeed", 2, 5).name("Mouse Speed");
-
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x555555);
-    const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-
-    const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(width, height);
+    const scene = createScene();
+    const camera = createCam();
+    const renderer = createRenderer();
     const container = document.getElementById("root");
     container.appendChild(renderer.domElement);
 
-    const planeGeometry = new THREE.PlaneGeometry(6, 6);
-    const planeMaterial = new THREE.MeshBasicMaterial({
-      color: 0xffffff,
-      side: THREE.DoubleSide,
-    });
-    const planeMesh = new THREE.Mesh(planeGeometry, planeMaterial);
+    const { gui, rotationControl } = createGUI();
 
-    planeMesh.rotation.x = -Math.PI / 2;
-    planeMesh.position.y = -1;
+    const cube = createCube();
+    const wireframe = createCubeWirefram();
+    const plane = createPlane();
 
-    scene.add(planeMesh);
+    scene.add(plane);
+    scene.add(cube);
+    scene.add(wireframe);
 
-    //#region //* Wireframe Cube
-    const lineGeometry = new THREE.BoxGeometry(2.01, 2.01, 2.01);
-    const lineWirefram = new THREE.WireframeGeometry(lineGeometry);
-    const lineMaterial = new THREE.LineBasicMaterial({ color: 0x00ffff });
-    const line = new THREE.LineSegments(lineWirefram, lineMaterial);
-
-    scene.add(line);
-    //#endregion
-
-    //? Cube material 
-    const cubeGeometry = new THREE.BoxGeometry(2, 2, 2);
-    const cubeMaterial = new THREE.MeshToonMaterial({
-      color: 0x00ff00,
-      emissive: 0xff0000,
-      flatShading: true,
-    });
-    const cubeMesh = new THREE.Mesh(cubeGeometry, cubeMaterial);
-
-    scene.add(cubeMesh);
-
-
-    camera.position.set(0, 2, 5); // Start Cam Position
-    camera.lookAt(cubeMesh.position); // Look at the center of the cube
-    // camera.rotation.set(0, 0, 0); // Reset Cam rotation
-
-    
-
-    const cleanMouseNav = setupMouseNavigation(camera, renderer, cubeMesh);
+    camera.lookAt(cube.position);
 
     function animate() {
       requestAnimationFrame(animate);
-
-      line.rotation.y += rotationControl.rotationSpeed;
-      cubeMesh.rotation.y += rotationControl.rotationSpeed;
-
+  
+      wireframe.rotation.y += rotationControl.rotationSpeed / 100;
+      cube.rotation.y += rotationControl.rotationSpeed / 100;
+  
       renderer.render(scene, camera);
     }
-
+  
     animate();
 
     return () => {
       container.removeChild(renderer.domElement);
       renderer.dispose();
-      gui.destroy();
-      cleanMouseNav();
+      gui.destroy()
     };
   }, []);
 
