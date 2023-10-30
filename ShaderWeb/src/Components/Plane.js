@@ -1,18 +1,19 @@
 import * as THREE from "three";
 
-const createPlane = () => {
-  const planeGeometry = new THREE.PlaneGeometry(6, 6);
-  const planeMaterial = new THREE.MeshBasicMaterial({
-    color: 0xffffff,
-    side: THREE.DoubleSide,
-  });
-  const planeMesh = new THREE.Mesh(planeGeometry, planeMaterial);
+const createPlane = (subdivisionX, subdivisionsY) => {
 
-  planeMesh.rotation.x = -Math.PI / 2;
-  planeMesh.position.y = -1;
+    const planeGeometry = new THREE.PlaneGeometry(6, 6, subdivisionX, subdivisionsY); // Ajoutez les subdivisions
+    const planeMaterial = new THREE.MeshBasicMaterial({
+      color: 0x00ff00,
+      side: THREE.DoubleSide,
+      wireframe: true,
+    });
+    const planeMesh = new THREE.Mesh(planeGeometry, planeMaterial);
 
-//   scene.add(planeMesh);
-  return planeMesh;
+    planeMesh.rotation.x = -Math.PI / 2;
+    planeMesh.position.y = -1;
+
+    return planeMesh;
 
 };
 

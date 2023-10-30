@@ -29,23 +29,21 @@ const ShaderPage = () => {
 
     const { gui, rotationControl } = createGUI();
 
-    const cube = createCube();
     const wireframe = createCubeWirefram();
-    const plane = createPlane();
+    wireframe.position.y = 1;
+    const plane = createPlane(10, 10);
 
     scene.add(plane);
-    scene.add(cube);
     scene.add(wireframe);
 
-    // camera.lookAt(cube.position);
-    controls.target.copy(cube.position);
+    controls.target.copy(plane.position);
     controls.update();
 
     function animate() {
       requestAnimationFrame(animate);
   
-      // wireframe.rotation.y += rotationControl.rotationSpeed / 100;
-      // cube.rotation.y += rotationControl.rotationSpeed / 100;
+      wireframe.rotation.y += rotationControl.rotationSpeed / 100;
+      wireframe.rotation.x += rotationControl.rotationSpeed / 100;
       controls.update();
       renderer.render(scene, camera);
     }
