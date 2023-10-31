@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import * as THREE from "three";
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import Stats from 'three/examples/jsm/libs/stats.module'
 //Components
 import createCam from "../Components/Camera.js";
 import createScene from "../Components/Scene.js";
@@ -11,7 +11,6 @@ import createCubeWirefram from "../Components/Wireframe.js";
 import createRenderer from "../Systems/Renderer.js";
 import createGUI from "../Systems/GUI.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import lodingPlayer from "../Components/Player/SpaceBoy.js";
 import createLight from "../Components/light.js";
 // import createControls from "../Systems/Controls.js"; //todo Fix later
 
@@ -32,51 +31,32 @@ const ShaderPage = () => {
     //#endregion
 
     const { gui, rotationControl } = createGUI();
+    const stats = new Stats()
+    document.body.appendChild(stats.dom)
 
     const wireframe = createCubeWirefram();
     wireframe.position.y = 1;
     const plane = createPlane(10, 10);
     const light = createLight();
 
-    //#region //* Loader 3D object
-    const loader = new GLTFLoader();
-
-    loader.load( './SpaceBoy.glb', function ( gltf ) {
-      const model = gltf.scene;
-
-      const wireframeMaterial = new THREE.MeshBasicMaterial({
-        color: 0x00ffff,
-        wireframe: true,
-      });
-
-      model.traverse(function (child) {
-        if (child.isMesh) {
-            child.material = wireframeMaterial;
-        }
-      });
-
-      model.position.y = -1
-      scene.add(model);
-
-    }, undefined, function ( error ) {
-      console.error( error );
-    });
-    //#endregion
 
     scene.add(plane);
-    // scene.add(wireframe);
+    scene.add(wireframe);
     scene.add(light);
 
     controls.target.copy(plane.position);
     controls.update();
 
+    const clock = new THREE.Clock()
+
     function animate() {
       requestAnimationFrame(animate);
-  
+    
       wireframe.rotation.y += rotationControl.rotationSpeed / 100;
       wireframe.rotation.x += rotationControl.rotationSpeed / 100;
       controls.update();
       renderer.render(scene, camera);
+      stats.update()
     }
   
     animate();
