@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 const createCubeWirefram = () => {
-  const wireframeGeometry = new THREE.BoxGeometry(1,1,1);
+  const wireframeGeometry = new THREE.BoxGeometry(2,2,2);
   const wireframeWirefram = new THREE.WireframeGeometry(wireframeGeometry);
   const wireframeMaterial = new THREE.LineBasicMaterial({ color: 0x00ffff });
   const wireframe = new THREE.LineSegments( wireframeWirefram, wireframeMaterial);
