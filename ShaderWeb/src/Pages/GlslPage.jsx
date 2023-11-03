@@ -29,21 +29,23 @@ const Glsl = () => {
       wireframe: true,
       uniforms: uniformData,
       vertexShader: `
+        varying vec3 pos;
         uniform float u_time;
 
         void main()	{
           vec4 result;
+          pos = position;
 
           // Change only this
           // result = vec4(position.x, sin((position.z/2.0) + u_time) + sin((position.x/2.0) - u_time) + 2.0, position.z, 0.5);
 
           //? Wave
-          // result = vec4(
-          //   position.x, 
-          //   sin(position.z/1.5 + u_time * 1.5) / .75*sin(u_time), 
-          //   position.z, 
-          //   0.5
-          // );
+          result = vec4(
+            position.x, 
+            sin(position.z/2. + u_time * 1.5) + position.y, 
+            position.z, 
+            0.5
+          );
 
           //?Noeud papillon
           // vec2 center = vec2(0., 0.);
@@ -59,12 +61,12 @@ const Glsl = () => {
           //   0.5
           // );
 
-          result = vec4(
-            position.x, 
-            0.0, 
-            position.z, 
-            0.5
-          );
+          // result = vec4(
+          //   position.x, 
+          //   0.0, 
+          //   position.z, 
+          //   0.5
+          // );
 
             gl_Position = projectionMatrix
               * modelViewMatrix
@@ -72,8 +74,19 @@ const Glsl = () => {
           }
           `,
       fragmentShader: `
+        varying vec3 pos;
+        uniform float u_time;
           void main() {
-            gl_FragColor = vec4(0.0, 1.0, 1.0, 1.0);
+            float r = abs(sin(u_time*2.));
+            float g = abs(sin(u_time*.5));
+            float b = abs(sin(u_time) + 1.);
+
+            if(pos.x >= 0.0) {
+              gl_FragColor = vec4(r, -g, 1.0, 1.0);
+            } else {
+              gl_FragColor = vec4(-r, g, 1.0, 1.0);
+            }
+            // gl_FragColor = vec4(r, g, 1.0, 1.0);
           }
         `,
     });
