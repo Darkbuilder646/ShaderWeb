@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import * as THREE from "three";
 
 import SceneInit from "../assets/lib/SceneInit";
-import vertexShaderCode from "../assets/lib/a_vertex.glsl";
-import fragmentShaderCode from "../assets/lib/a_fragment.glsl";
+import vertexShaderCode from "../assets/lib/base_vertex.glsl";
+import fragmentShaderCode from "../assets/lib/base_fragment.glsl";
 
 const Glsl = () => {
   useEffect(() => {
