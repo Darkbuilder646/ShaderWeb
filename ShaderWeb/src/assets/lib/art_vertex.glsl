@@ -8,6 +8,7 @@ void main(){
 
     gl_Position = projectionMatrix * modelViewMatrix * result;
 
+    // Transformation des coordonnées de texture UV de [0, 1] en [-1, 1]
     _uv = (uv - 0.5) * 2.0;
     
 }

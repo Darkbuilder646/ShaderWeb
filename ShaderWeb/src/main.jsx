@@ -7,6 +7,13 @@ import GlslArtPlane from './Pages/GlslArtPlane.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
+    {/* Shader Plane */}
     <GlslArtPlane />
+
+    {/* Floting Cube */}
+    {/* <ShaderPage />  */}  
+
+    {/* Waves */}
+    {/* <Glsl /> */}
   </React.StrictMode>,
 )
