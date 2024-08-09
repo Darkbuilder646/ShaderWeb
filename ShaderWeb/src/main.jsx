@@ -4,16 +4,20 @@ import './index.css'
 import ShaderPage from './Pages/ShaderPage.jsx'
 import Glsl from './Pages/GlslPage'
 import GlslArtPlane from './Pages/GlslArtPlane.jsx'
+import GlslRayMarching from './Pages/GlslRayMarching.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     {/* Shader Plane */}
-    <GlslArtPlane />
+    {/* <GlslArtPlane /> */}
 
     {/* Floting Cube */}
-    {/* <ShaderPage />  */}  
+    {/* <ShaderPage />    */}
 
     {/* Waves */}
     {/* <Glsl /> */}
+
+    {/* Raymarching */}
+    <GlslRayMarching />
   </React.StrictMode>,
 )

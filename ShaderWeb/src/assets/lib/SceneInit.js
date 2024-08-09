@@ -48,7 +48,7 @@ export default class SceneInit {
 
     this.clock = new THREE.Clock();
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-    this.controls.enableDamping = true;
+    this.controls.enableDamping = false;
     this.stats = Stats();
     document.body.appendChild(this.stats.dom);
 

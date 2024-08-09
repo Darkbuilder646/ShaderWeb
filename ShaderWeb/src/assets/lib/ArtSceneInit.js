@@ -49,7 +49,7 @@ export default class ArtSceneInit {
     this.clock = new THREE.Clock();
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
-    this.controls.enabled = false;
+    this.controls.enabled = true;
     this.stats = Stats();
     document.body.appendChild(this.stats.dom);
 
