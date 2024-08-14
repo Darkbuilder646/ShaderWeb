@@ -1,15 +1,24 @@
 import { useEffect } from "react";
 import * as THREE from "three";
 
-import vertexShaderCode from "../assets/lib/art_vertex.glsl";
-import fragmentShaderCode from "../assets/lib/art_fragment.glsl";
 import ArtSceneInit from "../assets/lib/ArtSceneInit";
+//GLSL Utils
+import sdfFunctions from "../assets/lib/utils/sdfFunctions.glsl"
+
+//Main GLSL
+import mainvertexShaderCode from "../assets/lib/art_vertex.glsl";
+import mainfragmentShaderCode from "../assets/lib/art_fragment.glsl";
 
 const GlslArtPlane = () => {
   useEffect(() => {
     const canvas = new ArtSceneInit("Glsl_Canva");
     canvas.initialize();
     canvas.animate();
+
+    const fragmentShaderCode = `
+      ${sdfFunctions}
+      ${mainfragmentShaderCode}
+    `;
 
     const uniformData = {
       u_time: {
@@ -25,10 +34,9 @@ const GlslArtPlane = () => {
 
     const planeGeometry = new THREE.PlaneGeometry(30, 30, 1, 1);
     const planeMaterial = new THREE.ShaderMaterial({
-      wireframe: false,
       side: THREE.DoubleSide,
       uniforms: uniformData,
-      vertexShader: vertexShaderCode,
+      vertexShader: mainvertexShaderCode,
       fragmentShader: fragmentShaderCode,
     });
     const boxMesh = new THREE.Mesh(planeGeometry, planeMaterial);

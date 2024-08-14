@@ -1,18 +1,6 @@
 varying vec2 _uv;
 uniform float u_time;
 
-//function from https://iquilezles.org/articles/distfunctions2d/
-
-// SDF function
-float sdBox(vec2 point, vec2 size) {
-    vec2 d = abs(point) - size;
-    return length(max(d, .0)) + min(max(d.x, d.y), .0);
-}
-
-float opBox(in vec2 point, in vec2 size, in float thickness) {
-    return abs(sdBox(point, size)) - thickness;
-}
-
 void main() {
     
     vec2 boxSize_visior = vec2(.32, .15);
