@@ -3,8 +3,8 @@ import * as THREE from "three";
 
 import ArtSceneInit from "../assets/lib/ArtSceneInit";
 //GLSL Utils
-import rotationFunction from "../assets/lib/utils/rotationFunctions.glsl"
-import sdfFunction from "../assets/lib/utils/sdfFunctions.glsl"
+import rotationFunctions from "../assets/lib/utils/rotationFunctions.glsl"
+import sdfFunctions from "../assets/lib/utils/sdfFunctions.glsl"
 
 //Main GLSL
 import mainvertexShaderCode from "../assets/lib/rayMarching_vertex.glsl";
@@ -21,8 +21,8 @@ const GlslRayMarching = () => {
     // canvas.scene.add(axisHelper);
 
     const fragmentShaderCode = `
-      ${rotationFunction}
-      ${sdfFunction}
+      ${sdfFunctions}
+      ${rotationFunctions}
       ${mainfragmentShaderCode}
     `;
 

@@ -1,7 +1,8 @@
 /*
-  Rotation matrix
-  1.57 => 90° angle
+*  Rotation matrix
 */
+
+// 1.57 => 90° angle
 mat3 rotationX(float angle) {
     float c = cos(angle);
     float s = sin(angle);
@@ -25,14 +26,6 @@ mat3 rotationZ(float angle) {
                 s, c, 0.0,
                 0.0, 0, 1.0);
 }
-
-// mat3 rotationXY(float angle) {
-//     float c = cos(angle);
-//     float s = sin(angle);
-//     return mat3(c, 0.0, s,
-//                 s*s, c, -s*c,
-//                 -s*c, s, c*c);
-// }
 
 mat3 rotationXY(float angle) {
     return rotationY(angle) * rotationX(angle);

@@ -1,9 +1,20 @@
 /*
-    SDF Function
+*    SDF Function
 */
+
+// ************ 3D *************
+float sdSphere(vec3 p, float s) {
+    return length(p)-s;
+}
+
 float sdBox(vec3 p, vec3 b) {
-  vec3 d = abs(p) - b;
-  return length(max(d, 0.0)) + min(max(d.x, max(d.y, d.z)), 0.0);
+    vec3 d = abs(p) - b;
+    return length(max(d, 0.0)) + min(max(d.x, max(d.y, d.z)), 0.0);
+}
+
+float sdRoundBox(vec3 p, vec3 b, float r) {
+    vec3 q = abs(p) - b + r;
+    return length(max(q,0.0)) + min(max(q.x,max(q.y,q.z)),0.0) - r;
 }
 
 float sdBoxFrame(vec3 p, vec3 b, float e) {
@@ -16,36 +27,50 @@ float sdBoxFrame(vec3 p, vec3 b, float e) {
     );
 }
 
+float sdCappedCylinder(vec3 p, float h, float r) {
+    vec2 d = abs(vec2(length(p.xz),p.y)) - vec2(r,h);
+    return min(max(d.x,d.y),0.0) + length(max(d,0.0));
+}
 
+float sdPlane(vec3 p, vec3 n, float h) {
+    //! n must be normalized
+    return dot(p,n) + h;
+}
 
-//? Other for later
+// ************ 2D *************
+float sdCircle(vec2 p, float r) {
+    return length(p) - r;
+}
 
-// float mapLoop(vec3 pos) {
-//     float d = 1e6; // Grande valeur initiale pour la distance
-//     int numCubes = 6; // Nombre de cubes concentriques
-//     float sizeStep = 0.15; // Réduction de taille à chaque étape
+float sdBox(in vec2 p,in vec2 b ) {
+    vec2 d = abs(p)-b;
+    return length(max(d,0.0)) + min(max(d.x,d.y),0.0);
+}
 
-//     for (int i = 0; i < numCubes; i++) {
-//         float scale = float(numCubes - i) * sizeStep;
-//         vec3 size = vec3(scale, scale, scale);
-//         vec3 posCube;
-//         if(i % 2 == 0) {
-//           posCube = rotationXY(1.57 * u_time/8.) * (pos - vec3(0.0, 0.0, 0.0));
-//         } else {
-//           posCube = rotationXY(-1.57 * u_time/8.) * (pos - vec3(0.0, 0.0, 0.0));
-//         }
-//         float dist = sdBoxFrame(posCube, size, 0.025);
-//         d = min(d, dist);
-//     }
+// ************ Primitive combinations *************
+float opUnion( float d1, float d2 ) {
+    return min(d1,d2);
+}
 
-//     return d;
-// }
+float opSubtraction( float d1, float d2 ) {
+    return max(-d1,d2);
+}
 
-// vec3 calcNormalLoop(vec3 pos) {
-//     vec2 e = vec2(1.0, -1.0) * 0.5773;
-//     const float eps = 0.0005;
-//     return normalize(e.xyy * mapLoop(pos + e.xyy * eps) + 
-//                      e.yyx * mapLoop(pos + e.yyx * eps) + 
-//                      e.yxy * mapLoop(pos + e.yxy * eps) + 
-//                      e.xxx * mapLoop(pos + e.xxx * eps));
-// }
+float opIntersection( float d1, float d2 ) {
+    return max(d1,d2);
+}
+
+float opSmoothUnion( float d1, float d2, float k ) {
+    float h = clamp( 0.5 + 0.5*(d2-d1)/k, 0.0, 1.0 );
+    return mix( d2, d1, h ) - k*h*(1.0-h);
+}
+
+float opSmoothSubtraction( float d1, float d2, float k ) {
+    float h = clamp( 0.5 - 0.5*(d2+d1)/k, 0.0, 1.0 );
+    return mix( d2, -d1, h ) + k*h*(1.0-h);
+}
+
+float opSmoothIntersection( float d1, float d2, float k ) {
+    float h = clamp( 0.5 - 0.5*(d2-d1)/k, 0.0, 1.0 );
+    return mix( d2, d1, h ) + k*h*(1.0-h);
+}
