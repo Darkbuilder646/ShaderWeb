@@ -1,5 +1,6 @@
 /*
 *    SDF Function
+*    https://iquilezles.org/articles/distfunctions/
 */
 
 // ************ 3D *************
@@ -45,6 +46,10 @@ float sdCircle(vec2 p, float r) {
 float sdBox(in vec2 p,in vec2 b ) {
     vec2 d = abs(p)-b;
     return length(max(d,0.0)) + min(max(d.x,d.y),0.0);
+}
+
+float opBox(in vec2 p, in vec2 s, in float r) {
+    return abs(sdBox(p, s)) - r;
 }
 
 // ************ Primitive combinations *************
