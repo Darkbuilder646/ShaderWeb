@@ -25,8 +25,7 @@ const GlslRayMarching = () => {
 
     const planeGeometry = new THREE.PlaneGeometry(30, 30, 1, 1);
     const planeMaterial = new THREE.ShaderMaterial({
-      //   wireframe: false,
-      //   side: THREE.DoubleSide,
+      side: THREE.DoubleSide,
       uniforms: uniformData,
       vertexShader: vertexShaderCode,
       fragmentShader: fragmentShaderCode,
