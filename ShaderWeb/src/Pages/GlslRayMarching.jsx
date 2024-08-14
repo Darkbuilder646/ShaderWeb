@@ -2,8 +2,13 @@ import { useEffect } from "react";
 import * as THREE from "three";
 
 import ArtSceneInit from "../assets/lib/ArtSceneInit";
-import vertexShaderCode from "../assets/lib/rayMarching_vertex.glsl";
-import fragmentShaderCode from "../assets/lib/rayMarching_fragment.glsl";
+//GLSL Utils
+import rotationFunction from "../assets/lib/utils/rotationFunctions.glsl"
+import sdfFunction from "../assets/lib/utils/sdfFunctions.glsl"
+
+//Main GLSL
+import mainvertexShaderCode from "../assets/lib/rayMarching_vertex.glsl";
+import mainfragmentShaderCode from "../assets/lib/rayMarching_fragment.glsl";
 
 const GlslRayMarching = () => {
   useEffect(() => {
@@ -14,6 +19,12 @@ const GlslRayMarching = () => {
     //Axis gizmo
     // const axisHelper = new THREE.AxesHelper(32);
     // canvas.scene.add(axisHelper);
+
+    const fragmentShaderCode = `
+      ${rotationFunction}
+      ${sdfFunction}
+      ${mainfragmentShaderCode}
+    `;
 
     const uniformData = {
       u_time: { type: "f", value: 0.0 },
@@ -27,7 +38,7 @@ const GlslRayMarching = () => {
     const planeMaterial = new THREE.ShaderMaterial({
       side: THREE.DoubleSide,
       uniforms: uniformData,
-      vertexShader: vertexShaderCode,
+      vertexShader: mainvertexShaderCode,
       fragmentShader: fragmentShaderCode,
     });
     const planeMesh = new THREE.Mesh(planeGeometry, planeMaterial);
