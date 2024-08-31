@@ -8,9 +8,9 @@ import sdfFunctions from "../assets/lib/utils/sdfFunctions.glsl"
 
 //Main GLSL
 import mainVertexShaderCode from "../assets/lib/vertex.glsl";
-import mainfragmentShaderCode from "../assets/lib/rayMarching_fragment.glsl";
+import mainfragmentShaderCode from "../assets/lib/repetition_fragment.glsl";
 
-const GlslRayMarching = () => {
+const GlslDomainRepetition = () => {
   useEffect(() => {
     const canvas = new ArtSceneInit("Glsl_Canva");
     canvas.initialize();
@@ -34,7 +34,7 @@ const GlslRayMarching = () => {
       },
     };
 
-    const planeGeometry = new THREE.PlaneGeometry(30, 30, 1, 1);
+    const planeGeometry = new THREE.PlaneGeometry(75, 75, 1, 1);
     const planeMaterial = new THREE.ShaderMaterial({
       side: THREE.DoubleSide,
       uniforms: uniformData,
@@ -58,4 +58,4 @@ const GlslRayMarching = () => {
   );
 };
 
-export default GlslRayMarching;
+export default GlslDomainRepetition;

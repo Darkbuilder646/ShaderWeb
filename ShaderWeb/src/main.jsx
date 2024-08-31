@@ -5,6 +5,7 @@ import ShaderPage from './Pages/ShaderPage.jsx'
 import Glsl from './Pages/GlslPage'
 import GlslArtPlane from './Pages/GlslArtPlane.jsx'
 import GlslRayMarching from './Pages/GlslRayMarching.jsx'
+import GlslDomainRepetition from './Pages/GlslDomainRepetition.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -18,6 +19,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     {/* <Glsl /> */}
 
     {/* Raymarching */}
-    <GlslRayMarching />
+    {/* <GlslRayMarching /> */}
+
+    {/* Domain Repetition */}
+    <GlslDomainRepetition />
   </React.StrictMode>,
 )
