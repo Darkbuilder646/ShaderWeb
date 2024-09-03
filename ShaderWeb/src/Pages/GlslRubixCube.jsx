@@ -8,17 +8,13 @@ import sdfFunctions from "../assets/lib/utils/sdfFunctions.glsl"
 
 //Main GLSL
 import mainvertexShaderCode from "../assets/lib/vertex.glsl";
-import mainfragmentShaderCode from "../assets/lib/rayMarching_fragment.glsl";
+import mainfragmentShaderCode from "../assets/lib/rubixCube_fragment.glsl";
 
-const GlslRayMarching = () => {
+const GlslRubixCube = () => {
   useEffect(() => {
     const canvas = new ArtSceneInit("Glsl_Canva");
     canvas.initialize();
     canvas.animate();
-
-    //Axis gizmo
-    // const axisHelper = new THREE.AxesHelper(32);
-    // canvas.scene.add(axisHelper);
 
     const fragmentShaderCode = `
       ${sdfFunctions}
@@ -58,4 +54,4 @@ const GlslRayMarching = () => {
   );
 };
 
-export default GlslRayMarching;
+export default GlslRubixCube;
