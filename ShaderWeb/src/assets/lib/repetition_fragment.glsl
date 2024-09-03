@@ -12,12 +12,24 @@ float opLimitedRepetitionRoundBox(vec3 p, float s, vec3 l, vec3 b) {
     return sdRoundBox(q, b, 0.05);
 }
 
+vec3 integerSin(float time, float frequency, float amplitude) {
+    float value = amplitude * sin(frequency * time);
+    
+    // Interpolation entre des valeurs entières pour un effet smooth
+    float t = smoothstep(0.0, 1.0, fract(abs(value))); // Smooth transition based on the fractional part of value
+    float lower = floor(abs(value));  // Lower bound integer
+    float upper = ceil(abs(value));   // Upper bound integer
+
+    return vec3(mix(lower, upper, t));
+}
+
+
 float map(vec3 pos) {
 
     vec3 pos1 = rotationY(1.57 * u_time * 0.25) * (pos - vec3(0.0, 0.0, 0.0));
     // float d1 = opRepetitionRoundBox(pos1, vec3(1.0), vec3(0.3));
-
-    float d1 = opLimitedRepetitionRoundBox(pos1, 1.5, vec3(1.), vec3(0.5));
+    vec3 repetitionFactor = integerSin(u_time, .5, 2.0);
+    float d1 = opLimitedRepetitionRoundBox(pos1, 1.5, repetitionFactor, vec3(0.5));
 
     return d1;
 
@@ -40,23 +52,23 @@ void main() {
   float angle = .75; 
 
   //* Position de la caméra
-  float distance = 7.0;
+  float distance = 8.0;
   float height = 3.5;
   vec3 camPos = vec3(distance * sin(angle), height, distance * cos(angle));
   vec3 camTarget = vec3(0.0, 0.0, 0.0);
   
   //* Calcul de la matrice de vue
-  vec3 camForward = normalize(camTarget - camPos);                                      //? forward vector of cam (z)
-  vec3 camRight = normalize(cross(vec3(0.0, 1.0, 0.0), camForward));    //? right vector of cam (x)
-  vec3 camUp = cross(camForward, camRight);                                          //? up vector of cam (y)
+  vec3 camForward = normalize(camTarget - camPos);                                     //? forward vector of cam (z)
+  vec3 camRight = normalize(cross(vec3(0.0, 1.0, 0.0), camForward));   //? right vector of cam (x)
+  vec3 camUp = cross(camForward, camRight);                                         //? up vector of cam (y)
 
   vec2 uv = (fragCoord.xy - 0.5 * iResolution.xy) / iResolution.y;
   vec3 rayDirection = normalize(uv.x * camRight + uv.y * camUp + 1.0 * camForward);
   
   //* Raymarching
-  const float tmax = 10.0; //? Max distance of ray
+  const float tmax = 50.0; //? Max distance of ray
   float travelDistance = 0.0;
-  for (int i = 0; i < 128; i++) {
+  for (int i = 0; i < 256; i++) {
       vec3 pos = camPos + travelDistance * rayDirection;
       float hit = map(pos);
       if (hit < 0.0001 || travelDistance > tmax) break;
