@@ -30,7 +30,7 @@ const GlslRubixCube = () => {
       },
     };
 
-    const planeGeometry = new THREE.PlaneGeometry(30, 30, 1, 1);
+    const planeGeometry = new THREE.PlaneGeometry(75, 75, 1, 1);
     const planeMaterial = new THREE.ShaderMaterial({
       side: THREE.DoubleSide,
       uniforms: uniformData,

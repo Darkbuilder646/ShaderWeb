@@ -2,10 +2,23 @@ varying vec2 _uv;
 uniform float u_time;
 uniform vec2 iResolution;
 
+vec3 rotateFace(vec3 p, vec3 faceCenter, float angle) {
+    // Translate position to origin of the face
+    vec3 translated = p - faceCenter;
+    // Apply rotation
+    vec3 rotated = rotationZ(angle) * translated;
+    // Translate position back
+    return rotated + faceCenter;
+}
+
 
 float map(vec3 pos) {
     float d = 100.0;
     vec3 b = vec3(0.5); // Taille de chaque petit cube
+
+    // Rotation de la face supérieure vers la droite
+    float rotationAngle = u_time * 0.25; // Ajuster le temps pour la vitesse de rotation
+    vec3 faceCenter = vec3(0.0, 0.0, 1.0); // Centre de la face supérieure
 
     // Parcourir chaque position dans la grille 3x3x3
     for (int x = -1; x <= 1; x++) {
@@ -13,6 +26,11 @@ float map(vec3 pos) {
             for (int z = -1; z <= 1; z++) {
                 vec3 offset = vec3(float(x), float(y), float(z));
                 vec3 p = pos - offset;
+
+                if (z == 1) {
+                    p = rotateFace(p, faceCenter, rotationAngle);
+                }
+
                 d = min(d, sdRoundBox(p, b, 0.05)); // Combine les distances
             }
         }
