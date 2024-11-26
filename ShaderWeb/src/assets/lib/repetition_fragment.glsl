@@ -26,11 +26,13 @@ vec3 integerSin(float time, float frequency, float amplitude) {
 
 float map(vec3 pos) {
 
-    vec3 pos1 = rotationY(1.57 * u_time * 0.25) * (pos - vec3(0.0, 0.0, 0.0));
-    // float d1 = opRepetitionRoundBox(pos1, vec3(1.0), vec3(0.3));
-    vec3 repetitionFactor = integerSin(u_time, .5, 2.0);
-    float d1 = opLimitedRepetitionRoundBox(pos1, 1.5, repetitionFactor, vec3(0.5));
-
+    vec3 pos1 = rotationX(1.57) * (pos - vec3(0.0, 0.0, 0.0)); //? u_time * 0.25
+    float d1 = opRepetitionRoundBox(pos1, vec3(1.0), vec3(0.3));
+    // vec3 repetitionFactor = integerSin(u_time, .5, 2.0);
+    // float d1 = opLimitedRepetitionRoundBox(pos1, 1.5, repetitionFactor, vec3(0.5));
+    //? LSD tier
+    // d1 *=  sin(0.25 * u_time);
+    // d1 *=  exp(.25 * u_time);
     return d1;
 
 }
@@ -49,13 +51,13 @@ void main() {
   vec2 fragCoord = gl_FragCoord.xy;
 
   // float angle = u_time * exp(.25 * u_time); 
-  float angle = .75; 
+  float angle = .2; 
 
   //* Position de la caméra
   float distance = 8.0;
-  float height = 3.5;
+  float height = 0.45;
   vec3 camPos = vec3(distance * sin(angle), height, distance * cos(angle));
-  vec3 camTarget = vec3(0.0, 0.0, 0.0);
+  vec3 camTarget = vec3(1.5, 0.0, 0.0);
   
   //* Calcul de la matrice de vue
   vec3 camForward = normalize(camTarget - camPos);                                     //? forward vector of cam (z)
@@ -80,13 +82,14 @@ void main() {
   if (travelDistance < tmax) {
       vec3 pos = camPos + travelDistance * rayDirection;
       vec3 normal = calcNormal(pos);
+    //   normal *= sin(u_time * 0.25);
       float diff = max(dot(normal, vec3(0.57703)), 0.0);
       float ambient = 0.5 + 0.5 * dot(normal, vec3(0.0, 1.0, 0.0));
   
       //* Calculer la couleur en fonction de la position
       float posFactor = length(pos);  // Distance du point à l'origine
       vec3 baseColor = vec3(0.2, 0.3, 0.4); // Couleur de base
-      vec3 highlightColor = vec3(0.85, 0.75, 0.65); // Couleur de surbrillance
+      vec3 highlightColor = vec3(0.3922, 0.3922, 0.3922); // Couleur de surbrillance
       color = mix(baseColor, highlightColor, posFactor / 5.0); // Interpolation en fonction de la position
   
       //* Ajout de l'éclairage
